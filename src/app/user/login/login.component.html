@@ -1,0 +1,25 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <div class="fadeIn first">
+      <h2>Issue Tracking Tool</h2>
+    </div>
+    <form>
+      <input type="email" [(ngModel)]="email" id="email" class="fadeIn second" name="email" placeholder="Email">
+      <input type="password" [(ngModel)]="password" id="password" class="fadeIn third" name="password" placeholder="password">
+      <input type="submit" class="fadeIn fourth" (click)="signinFunction()" value="Log In">
+      <div class="col-md-12 ">
+        <div class="login-or">
+          <hr class="hr-or">
+          <span class="span-or">or</span>
+        </div>
+      </div>
+      <button type="submit" class="fadeIn fourth btns" (click)="googlelogin()"> <i class="fa fa-google-plus" style="color:red"></i> <span style="margin-left: 11px;">Login with Google</span></button>
+
+    </form>
+
+    <div class="form-group">
+      <p class="text-center">Don't have account? <a [routerLink]="" (click)="goToSignup()" id="signup">Sign up here</a></p>
+    </div>
+
+  </div>
+</div>

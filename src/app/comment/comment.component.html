@@ -1,0 +1,48 @@
+<div class="page-topbar">
+  <div class="logo-area">
+    <h3 style="color:#fff; padding-top: 12px;">
+      Issue Tracking Tool
+    </h3>
+  </div>
+  <ul class="pull-right info-menu user-info" style="display: flex;">
+    <li class="profile">
+      <a routerLink="/notifications" class="toggle" aria-expanded="false">
+        <span class="badge">{{totalNotify}}</span> <i class="fa fa-bell"></i>
+      </a>
+    </li>
+    <li class="profile">
+      <a routerLink="" class="toggle" aria-expanded="false">
+        <span (click)="logout()">Logout <i class="fa fa-lock"></i></span>
+      </a>
+    </li>
+  </ul>
+
+</div>
+<div class="container">
+  <button type="button" class="close" aria-label="Close" style="margin-bottom: 13px; margin-top: 10px;" (click)="backToHome()">
+      <i class="fa fa-arrow-circle-left" style="font-size:15px" aria-hidden="true"></i><span aria-hidden="true" style="font-size:15px"> Back</span>
+    </button>
+</div>
+<div class="container" style="box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.19); margin-top: 50px;">
+  <div class="row">
+    <div class="col-md-12">
+      <strong style="font-size: 14px;">
+  Activity <small style="margin-left: 15px;">Comments</small></strong><br>
+
+
+      <div *ngFor="let comments of commentData" style="margin-top: 10px;">
+        <div class="crop" [style.color]="userColor ? userColor :'white'" [style.background]="userBg ? userBg :'blue'">
+          {{firstChar}}
+        </div>
+        <div class="about">
+          <div class="name">{{comments.commentName}}
+            <i *ngIf="messageRead" class="fa fa-circle warning"></i>
+          </div>
+        </div>
+        <h6> <small style="margin-left: 15px;">{{comments.createdOn | date:"short"}}</small></h6>
+        <span style="font-size: 14px; padding-left: 10px;"> {{comments.description}} </span>
+
+      </div>
+    </div>
+  </div>
+</div>

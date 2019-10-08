@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6 page-topbar">
+      <div class="logo-area">
+        <h3 style="color:#fff; padding-top: 12px;">
+          Issue Tracking Tool
+        </h3>
+        </div>
+    </div>
+    <div class="col-sm-6 page-topbar">
+      <ul class="pull-right info-menu user-info" style="display: flex;">
+        <li class="profile">
+          <a routerLink="/notifications" class="toggle" aria-expanded="false">
+            <span class="badge">{{totalNotify}}</span> <i class="fa fa-bell"></i>
+          </a>
+        </li>
+        <li class="profile">
+          <a routerLink="" class="toggle" aria-expanded="false">
+            <span (click)="logout()">Logout </span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,338 @@
+<div class="page-topbar">
+  <div class="logo-area">
+    <h3 style="color:#fff; padding-top: 12px;">
+      Issue Tracking Tool
+    </h3>
+  </div>
+  <ul class="pull-right info-menu user-info" style="display: flex;">
+    <li class="profile">
+      <a style="cursor: pointer;" (click)="notific()" class="toggle" aria-expanded="false">
+        <span class="badge">{{totalNotify}}</span> <i class="fa fa-bell"></i>
+      </a>
+    </li>
+    <li class="profile">
+      <a style="cursor: pointer;" class="toggle" aria-expanded="false">
+        <span (click)="logout()">Logout <i class="fa fa-lock"></i></span>
+      </a>
+    </li>
+  </ul>
+
+</div>
+<br><br>
+
+
+
+<div class="container" style="box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.19);" *ngIf="responseData">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">View Issue</h4>
+    <button type="button" class="close" aria-label="Close" (click)="backToHome()">
+      <i class="fa fa-arrow-circle-left" style="font-size:15px" aria-hidden="true"></i><span aria-hidden="true" style="font-size:15px"> Back</span>
+    </button>
+  </div>
+  <br>
+  <div class="modal-body">
+    <div>
+      <label><strong style="font-size: 15px;">Title: <i class="fa fa-pencil" (click)="open(mymodal4)" style="cursor: pointer; margin-left: 5px; color:#0095ff;" aria-hidden="true"></i></strong> <br>
+        {{responseData.title}} </label>
+      <div class="dropdown">
+        <i class="fa fa-eye " data-toggle="dropdown" title="watch options" style="font-size:24px; float: right; cursor: pointer; color:#0095ff;"></i>
+        <div class="dropdown-menu">
+          <form #createWatcherForm="ngForm" (ngSubmit)="createWatcher()">
+            <a class="dropdown-item">Add Watchers</a>
+            <div class="dropdown-divider"></div>
+            <span style="margin-left:10px;">Watching this issue</span><br>
+            <div *ngFor="let watcher of allWatchers">
+              <span style="margin-left:10px;">{{watcher.reporter_details[0]['firstName']}}   {{watcher.reporter_details[0]['lastName']}} </span>
+              <i class="fa fa-trash" style="color: red;" aria-hidden="true" (click)="openDialog(watcher.watcherId,watcher.issueId)" ></i>
+            </div>
+            <div class="form-group">
+              <label for="reporter" style="margin-left:10px;">Add Watchers </label>
+              <select [(ngModel)]="issueReporter" #reporter="ngModel" name="issueReporter" class="form-control" id="reporter" required>
+          <option [value]="currentUser.userId">{{currentUser.firstName}} {{currentUser.lastName}} </option> 
+          </select>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item"><button type="submit" class="btn btn-primary btn-sm">Add</button> 
+    
+  </a>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="responseData.status==1">
+      <label for="status"><strong style="font-size: 14px;">Status: <i class="fa fa-pencil" (click)="open(mymodal5)" style="cursor: pointer;margin-left: 5px; color:#0095ff;" aria-hidden="true"></i></strong> <br>
+        Backlog</label><br>
+    </div>
+    <div *ngIf="responseData.status==2">
+      <label for="status"><strong style="font-size: 14px;">Status: <i class="fa fa-pencil" (click)="open(mymodal5)" style="cursor: pointer;margin-left: 5px; color:#0095ff;" aria-hidden="true"></i></strong> <br>
+        In-Progress</label><br>
+    </div>
+    <div *ngIf="responseData.status==3">
+      <label for="status"><strong style="font-size: 14px;">Status: <i class="fa fa-pencil" (click)="open(mymodal5)" style="cursor: pointer;margin-left: 5px; color:#0095ff;" aria-hidden="true"></i></strong> <br>
+        In-Test</label><br>
+    </div>
+    <div *ngIf="responseData.status==4">
+      <label for="status"><strong style="font-size: 14px;">Status: <i class="fa fa-pencil" (click)="open(mymodal5)" style="cursor: pointer;margin-left: 5px; color:#0095ff;" aria-hidden="true"></i></strong> <br>
+        Done</label><br>
+    </div>
+
+
+
+    <div style=" border: 1px solid #f3f3f3; border-radius: 5px; width: 80%; ">
+      <div class="crop" style="margin: 16px 20px 5px 40px;" [style.color]="userColor ? userColor :'white'" [style.background]="userBg ? userBg :'blue'">
+        {{firstChar}}
+      </div>
+      <label for="description" style="margin: 13px 0px 5px -5px;"><strong style="font-size: 14px; ">Description: <i class="fa fa-pencil" (click)="open(mymodal6)" style="cursor: pointer;margin-left: 5px; color:#0095ff;" aria-hidden="true"></i> </strong> <br>
+        {{responseData.description}} </label>
+
+    </div>
+
+
+
+
+    <div class="row">
+      <div class="col-sm-12">
+        <label for="description"><strong style="font-size: 14px;">Attachment:</strong>
+  
+   </label><br>
+        <img src="http://localhost:3000/{{responseData.images}}" style="cursor: pointer;" height="150" width="10%" data-toggle="modal"
+          data-target="#basicExampleModal"><br>
+
+      </div>
+    </div><br>
+    <strong style="font-size: 14px;">
+  Activity <small style="margin-left: 15px;">Comments</small></strong><br>
+
+
+    <div *ngFor="let comments of commentData" style="margin-top: 10px;">
+      <div click="nameClicked()" class="crop" [style.color]="userColor ? userColor :'white'" [style.background]="userBg ? userBg :'blue'">
+        {{firstChar}}
+      </div>
+      <div class="about">
+        <div class="name">{{comments.commentName}}
+          <i *ngIf="messageRead" class="fa fa-circle warning"></i>
+        </div>
+      </div>
+      <h6> <small style="margin-left: 15px;">{{comments.createdOn | date:"short"}}</small></h6>
+      <span style="font-size: 14px; padding-left: 10px;"> {{comments.description}} </span>
+
+    </div>
+
+
+
+
+
+
+
+    <br>
+    <div class="crop" [style.color]="userColor ? userColor :'white'" [style.background]="userBg ? userBg :'blue'">
+      {{firstChar}}
+    </div>
+    <div class="card-body" style="border: 1px solid #e4e5ea; padding: 0.40rem !important; width: 75%;">
+      <a class="card-link" (click)="open(mymodal2)" style="cursor: pointer; color:#0095ff;">Reply to a customer</a>
+
+    </div>
+    <br>
+
+    <div>
+      <label><strong style="font-size: 14px;">Assignee: <i class="fa fa-pencil" (click)="open(mymodal7)" style="cursor: pointer; margin-left: 5px;color:#0095ff;" aria-hidden="true"></i></strong><br>
+        {{responseData.assignee_details[0]['firstName']}} {{responseData.assignee_details[0]['lastName']}}</label>
+
+    </div>
+
+
+    <div>
+      <label><strong style="font-size: 14px;">Reportered by: <i class="fa fa-pencil" (click)="open(mymodal8)" style="cursor: pointer;margin-left: 5px; color:#0095ff;" aria-hidden="true"></i></strong><br>
+         {{responseData.reporter_details[0]['firstName']}} {{responseData.reporter_details[0]['lastName']}} on {{responseData.createdOn | date}} </label>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="http://localhost:3000/{{responseData.images}}" height="450px" width="100%">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary"><a [href]="fileUrl" download="file.png" style="color:#fff;">Download</a></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #mymodal2 let-modal>
+  <form #createCommentForm="ngForm" (ngSubmit)="createComment()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Comment</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="description"></label>
+        <app-ngx-editor [placeholder]="'Add a Comment...'" [spellcheck]="true" #description="ngModel" name="issueDescription" [(ngModel)]="issueDescription"></app-ngx-editor>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" style="margin-left: 10px;" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+
+    </div>
+  </form>
+</ng-template>
+
+
+
+
+<!--///// title/////-->
+<ng-template #mymodal4 let-modal>
+  <form [formGroup]="myForm">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Title</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" [(ngModel)]="responseData.title" formControlName="title" placeholder="Enter Title"
+          required>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" (click)="updateIssue(responseData.issueId)">Update</button>
+      <button type="button" style="margin-left: 10px;" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+
+    </div>
+  </form>
+</ng-template>
+
+
+<!--///// status/////-->
+<ng-template #mymodal5 let-modal>
+  <form [formGroup]="myForm">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Status</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select [(ngModel)]="responseData.status" formControlName="status" class="form-control" required>
+            <option *ngFor="let status of allStatus" [value]="status.id">{{status.label}}</option>
+          </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" (click)="updateIssue(responseData.issueId)">Update</button>
+      <button type="button" style="margin-left: 10px;" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+
+    </div>
+  </form>
+</ng-template>
+
+<!--///// description/////-->
+<ng-template #mymodal6 let-modal>
+  <form [formGroup]="myForm">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Description</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="description">Description</label>
+        <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" formControlName="description" [(ngModel)]="responseData.description"></app-ngx-editor>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" (click)="updateIssue(responseData.issueId)">Update</button>
+      <button type="button" style="margin-left: 10px;" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+
+    </div>
+  </form>
+</ng-template>
+
+<!--///// assignee/////-->
+<ng-template #mymodal7 let-modal>
+  <form [formGroup]="myForm">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Assignee</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="assignee">Assignee </label>
+        <select [(ngModel)]="responseData.assignee" formControlName="assignee" class="form-control" required>
+            <option [value]="currentUser.userId">{{currentUser.firstName}} {{currentUser.lastName}}</option>
+          </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" (click)="updateIssue(responseData.issueId)">Update</button>
+      <button type="button" style="margin-left: 10px;" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+
+    </div>
+  </form>
+</ng-template>
+
+
+<!--///// reporter/////-->
+<ng-template #mymodal8 let-modal>
+  <form [formGroup]="myForm">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Reporter</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="reporter">Reporter </label>
+        <select [(ngModel)]="responseData.reporter" formControlName="reporter" class="form-control" id="reporter" required>
+            <option *ngFor="let name of allUsers" [value]="name.userId">{{name.firstName}} {{name.lastName}}</option>
+          </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" (click)="updateIssue(responseData.issueId)">Update</button>
+      <button type="button" style="margin-left: 10px;" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+
+    </div>
+  </form>
+</ng-template>

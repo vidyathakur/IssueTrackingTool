@@ -1,0 +1,116 @@
+
+
+<div class="container">
+  <div class="row">
+   <div class="col-sm-12"><button type="button" (click)="open(mymodal)" class="btn btn-primary" style="margin-top: 40px;margin-bottom: 50px; float: right;">Create Issue</button></div>
+  </div>
+</div>
+
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field>
+<div class="table-container mat-elevation-z8 ">
+
+
+  <table mat-table [dataSource]="dataSource"  matSort>
+
+  <ng-container matColumnDef="title" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header > Title </th>
+    <td mat-cell *matCellDef="let issue" [routerLink]="['/edit-issue', issue.issueId]" style="cursor: pointer;"> {{issue.title}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+    <td mat-cell *matCellDef="let issue" [routerLink]="['/edit-issue', issue.issueId]" style="cursor: pointer;"> 
+<ngb-progressbar type="success" [value]="issue.percentage">{{issue.percentage}}</ngb-progressbar>
+ </td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+    <td mat-cell *matCellDef="let issue" [routerLink]="['/edit-issue', issue.issueId]" style="cursor: pointer;"> {{issue.description}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="reporter">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Reporter </th>
+    <td mat-cell *matCellDef="let issue" [routerLink]="['/edit-issue', issue.issueId]" style="cursor: pointer;"> {{issue.reporter_name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="assignee">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Assignee </th>
+  <td mat-cell *matCellDef="let issue" [routerLink]="['/edit-issue', issue.issueId]" style="cursor: pointer;"> {{issue.assignee_name}} </td>
+</ng-container>
+
+<ng-container matColumnDef="createdOn">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> createdOn </th>
+  <td mat-cell *matCellDef="let issue" [routerLink]="['/edit-issue', issue.issueId]" style="cursor: pointer;"> {{issue.createdOn | date}} </td>
+</ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+
+<ng-template #mymodal let-modal>
+  <form #createIssueForm="ngForm" (ngSubmit)="createIssue(); createIssueForm.reset()">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create Issue</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+  <div class="form-group">
+    <label for="issueTitle">Title</label>
+    <input type="text" class="form-control" name="issueTitle" [(ngModel)]="issueTitle" #title="ngModel" 
+      placeholder="Enter Title" required>
+  </div>
+ 
+  <div class="form-group">
+    <label for="status">Status</label>
+    <select [(ngModel)]="issueStatus" #status="ngModel"  name="issueStatus" class="form-control"  required>
+            <option *ngFor="let status of allStatus" [value]="status.id">{{status.label}}</option>
+          </select>
+  </div>
+ 
+
+
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <app-ngx-editor [placeholder]="'Enter text here...'" [spellcheck]="true" #description="ngModel" name="issueDescription" [(ngModel)]="issueDescription"></app-ngx-editor>
+  </div>
+  <div class="form-group">
+          <label for="reporter">Reporter </label>
+          <select [(ngModel)]="issueReporter" #reporter="ngModel" name="issueReporter" class="form-control" id="reporter"
+            required>
+            <option *ngFor="let name of allUsers" [value]="name.userId">{{name.firstName}} {{name.lastName}}</option>
+          </select>
+        </div>
+
+
+  <div class="form-group">
+  <label for="assignee">Assignee </label>
+  <select [(ngModel)]="issueAssignee" #assignee="ngModel" name="issueAssignee" class="form-control" id="assignee" required>
+            <option [value]="currentUser.userId">{{currentUser.firstName}} {{currentUser.lastName}}</option>
+          </select>
+</div>
+  <div class="form-group">
+  <label for="images">Attachment</label><br>
+  
+  <input type="file" [(ngModel)]="issueImages" #images="ngModel" name="images"  id="images" aria-describedby="firstHelp" (change)="selectImage($event)">
+ 
+</div>
+  
+
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" >Submit</button>
+<button type="button" style="margin-left: 10px;" class="btn btn-danger" (click)="modal.close('Save click')">Cancel</button>
+    
+  </div>
+  </form>
+</ng-template>

@@ -1,0 +1,59 @@
+<div class="page-topbar">
+  <div class="logo-area">
+    <h3 style="color:#fff; padding-top: 12px;">
+      Issue Tracking Tool
+    </h3>
+
+
+  </div>
+  <ul class="pull-right info-menu user-info" style="display: flex;">
+    <li class="profile">
+      <a routerLink="" class="toggle" aria-expanded="false">
+        <span class="badge">{{totalNotify}}</span> <i class="fa fa-bell"></i>
+      </a>
+    </li>
+    <li class="profile">
+      <a routerLink="" class="toggle" aria-expanded="false">
+        <span (click)="logout()">Logout <i class="fa fa-lock"></i></span>
+      </a>
+    </li>
+  </ul>
+
+</div>
+
+
+
+<div class="container" style="box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.19); margin-top: 30px;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive" style="margin-top: 30px;">
+        <button type="button" class="close" aria-label="Close" style="margin-bottom: 13px;" (click)="backToHome()">
+      <i class="fa fa-arrow-circle-left" style="font-size:15px" aria-hidden="true"></i><span aria-hidden="true" style="font-size:15px"> Back</span>
+    </button>
+        <table class="table table-bordered table-hover">
+
+          <thead>
+            <tr>
+              <th>UserName</th>
+              <th>Issue Title</th>
+              <th>createdOn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let notify of notification" (click)="goToDashboard(notify.issueId, notify.notificId)">
+              <td>{{notify.comment_details[0]['commentName']}}</td>
+              <td>{{notify.comment_details[0]['description']}}</td>
+              <td>{{notify.comment_details[0]['createdOn']}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+
+
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

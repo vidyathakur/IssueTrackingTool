@@ -1,0 +1,28 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <div class="fadeIn first">
+      <h2>Issue Tracking Tool</h2>
+    </div>
+
+    <form>
+      <input type="text" id="firstName" [(ngModel)]="firstName" class="fadeIn second" name="firstname" placeholder="FirstName">
+      <input type="text" id="lastName" [(ngModel)]="lastName" class="fadeIn second" name="lastname" placeholder="LastName">
+      <input type="password" id="password" [(ngModel)]="password" class="fadeIn third" name="password" placeholder="password">
+      <input type="email" id="email" [(ngModel)]="email" class="fadeIn second" name="email" placeholder="Email">
+      <input type="text" id="mobile" [(ngModel)]="mobile" class="fadeIn second" name="mobile" placeholder="Mobile">
+
+      <input type="submit" class="fadeIn fourth" value="SignUp" (click)="signupFunction()">
+
+    </form>
+    <div class="col-md-12 ">
+      <div class="login-or">
+        <hr class="hr-or">
+        <span class="span-or">or</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <p class="text-center"><a [routerLink]="" (click)="goToSignIn()" id="signin">Already have an account?</a></p>
+    </div>
+
+  </div>
+</div>
